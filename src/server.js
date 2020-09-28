@@ -1,9 +1,11 @@
 import 'dotenv/config'
 import express from 'express'
 import bodyParser from 'body-parser'
-import article from './article/index.js'
+import article from './article'
 
-const { SEVER_RUNNING_PORT } = process.env
+const {
+  SEVER_RUNNING_PORT
+} = process.env
 console.log('SEVER_RUNNING_PORT', SEVER_RUNNING_PORT)
 const app = express()
 
@@ -17,3 +19,5 @@ app.get('/', (req, res) => {
 app.listen(SEVER_RUNNING_PORT, () => {
   console.log(`app is listening to port ${SEVER_RUNNING_PORT}`)
 })
+
+export default app
