@@ -1,0 +1,1 @@
+test.todo('article model test');

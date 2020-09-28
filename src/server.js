@@ -1,5 +1,8 @@
 import 'dotenv/config'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import express from 'express'
+require('express-async-errors');
 import bodyParser from 'body-parser'
 import article from './article'
 
