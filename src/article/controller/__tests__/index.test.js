@@ -1,41 +1,13 @@
-import "regenerator-runtime/runtime"; // move to jest setup file
+import 'regenerator-runtime/runtime' // move to jest setup file
+import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
   createArticle,
   getArticles,
   getArticle,
   delArticle,
-  putArticle
+  putArticle,
 } from '../'
-
-let idCounter = 0
-
-function buildArticle({
-  title = 'default title',
-  content = 'default content',
-}) {
-  idCounter++
-  return ({
-    _id: idCounter,
-    title: `id:${idCounter} ${title} `,
-    content: `id:${idCounter} ${content} `,
-  })
-}
-
-function buildReq(parmas) {
-  return {
-    ...parmas,
-
-  }
-}
-
-function buildRes() {
-  return {
-    json: jest.fn()
-  }
-}
-
-
 
 jest.mock('../../db')
 
@@ -47,10 +19,10 @@ test('createArticle()', async () => {
   // Arrange
   const parmas = {
     title: 'my title',
-    content: 'my content'
+    content: 'my content',
   }
   const req = buildReq({
-    body: parmas
+    body: parmas,
   })
   const res = buildRes()
   const dummyItem = buildArticle(parmas)
@@ -66,4 +38,52 @@ test('createArticle()', async () => {
 
   expect(res.json).toHaveBeenCalledTimes(1)
   expect(res.json).toHaveBeenCalledWith(dummyItem)
-});
+})
+
+test.only('createArticle() return 404 if no [title] provided', async () => {
+  // Arrange
+  const parmas = {
+    // title: 'my title',
+    content: 'my content',
+  }
+  const req = buildReq({ body: parmas })
+  const res = buildRes()
+
+  // Act
+  await createArticle(req, res)
+
+  // Assert
+  expect(res.status).toHaveBeenCalledWith(400)
+  expect(res.json).toHaveBeenCalledTimes(1)
+  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "message": "no title provided!",
+      },
+    ]
+  `)
+})
+
+test.only('createArticle() return 404 if no [content] provided', async () => {
+  // Arrange
+  const parmas = {
+    title: 'my title',
+    // content: 'my content',
+  }
+  const req = buildReq({ body: parmas })
+  const res = buildRes()
+
+  // Act
+  await createArticle(req, res)
+
+  // Assert
+  expect(res.status).toHaveBeenCalledWith(400)
+  expect(res.json).toHaveBeenCalledTimes(1)
+  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "message": "no content provided!",
+      },
+    ]
+  `)
+})
