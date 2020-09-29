@@ -1,72 +1,74 @@
-let articleDB = {
-  article: [],
-  count: 0
-};
+import BadRequestError from '../../utils/error'
+import articleDB from '../db'
 
-const addArticle = (count =1) => {  
-  for (let i = 1; i <=count; i++) {
-    articleDB["article"].push({
-      title: `title ${i + articleDB.count}`,
-      content: `content ${i + articleDB.count}`,
-    }) 
-    articleDB.count++;
-  }
+/*
+  Controller
+*/
 
-  return new Promise((res,rej) => {
-    res(articleDB)
-  })
-}
-
-const readArticle = (id) => new Promise((res, rej) => res({
-  article: articleDB.article[id-1],
-  count: 1
-}));
-
-const readAllArticle = (id) => new Promise((res, rej) => res(articleDB));
-
-const deleteArticle = (id) => new Promise((res, rej) => {
-  try{
-    if (articleDB.count === 0) throw new Error('No articles!')
-    articleDB.article = articleDB.article.filter((a,idx) => idx !== id-1),
-    articleDB.count = articleDB.article.length
-    console.log('articleDB', articleDB)
-    res(articleDB)
-  } catch (err) {
-    rej(`${err}`)
-  }
-});
-
-
-// C
+// Create
 async function createArticle(req, res, next) {
-  const createdArticle = await addArticle()  
+  const {
+    title,
+    content
+  } = req.body
+
+  if (title === undefined) res.status(400).json({
+    message: `no title provided!`
+  })
+  if (content === undefined) res.status(400).json({
+    message: `no content provided!`
+  })
+  const createdArticle = await articleDB.add({
+    title,
+    content
+  }).catch((error) => next(new BadRequestError(error)));
+  console.log('createdArticle', createdArticle);
   res.json(createdArticle)
 }
 
-// R-all
+// Read-all
 async function getArticles(req, res, next) {
-  const getAllArticle = await readAllArticle()
+  const getAllArticle = await articleDB.readAll()
   res.json(getAllArticle)
 }
 
-// R
+// Read
 async function getArticle(req, res, next) {
   console.log('req.params.id', req.params.id)
-  const getArticle = await readArticle(req.params.id)
+  const getArticle = await articleDB.read(req.params.id).catch((error) => next(new BadRequestError(error)));
   res.json(getArticle)
 }
 
-// U
+// update
+async function putArticle(req, res, next) {
+  const {
+    _id,
+    title,
+    content
+  } = req.body
 
-// D
+  if (title === undefined) res.status(400).json({
+    message: `no title provided!`
+  })
+  if (content === undefined) res.status(400).json({
+    message: `no content provided!`
+  })
+
+  const data = await articleDB.update({
+    _id,
+    title,
+    content
+  }).catch((error) => next(new BadRequestError(error)));
+  res.json(data)
+}
+
+// Delete
 async function delArticle(req, res, next) {
-  try {
-    const {id} = req.params
-    const data = await deleteArticle(id)
-    res.json(data)    
-  } catch (err) {
-    res.status(400).json({message: err})
-  }
+  const {
+    id
+  } = req.params
+  const data = await articleDB.remove(id).catch((error) => next(new BadRequestError(error)));
+  res.json(data)
 }
 
 
@@ -74,5 +76,6 @@ export {
   createArticle,
   getArticles,
   getArticle,
-  delArticle
+  delArticle,
+  putArticle
 }
