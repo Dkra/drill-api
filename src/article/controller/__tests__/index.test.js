@@ -61,6 +61,9 @@ test('createArticle()', async () => {
   await createArticle(req, res)
 
   // Assert
+  expect(articleDB.add).toHaveBeenCalledTimes(1)
+  expect(articleDB.add).toHaveBeenCalledWith(parmas)
+
   expect(res.json).toHaveBeenCalledTimes(1)
   expect(res.json).toHaveBeenCalledWith(dummyItem)
 });
