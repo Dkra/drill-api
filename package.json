@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec npm run restart",
-    "restart": "rm -rf dist && npm run build && npm run start",
-    "build": "babel src --out-dir dist",
-    "start": "node dist/server.js --inspect-brk",
+    "start": "nodemon --exec babel-node src/server.js --inspect",
+    "build": "babel src --out-dir build",
     "test": "jest --watch",
     "test:ci": "jest"
   },
