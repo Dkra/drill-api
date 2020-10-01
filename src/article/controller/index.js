@@ -7,7 +7,10 @@ import articleDB from '../db'
 
 // Create
 async function createArticle(req, res, next) {
-  const { title, content } = req.body
+  const {
+    title,
+    content
+  } = req.body
 
   if (title === undefined) {
     res.status(400).json({
@@ -51,7 +54,11 @@ async function getArticle(req, res, next) {
 
 // update
 async function putArticle(req, res, next) {
-  const { _id, title, content } = req.body
+  const {
+    _id,
+    title,
+    content
+  } = req.body
 
   if (title === undefined)
     res.status(400).json({
@@ -74,11 +81,19 @@ async function putArticle(req, res, next) {
 
 // Delete
 async function delArticle(req, res, next) {
-  const { id } = req.params
+  const {
+    id
+  } = req.params
   const data = await articleDB
     .remove(id)
     .catch((error) => next(new BadRequestError(error)))
   res.json(data)
 }
 
-export { createArticle, getArticles, getArticle, delArticle, putArticle }
+export {
+  createArticle,
+  getArticles,
+  getArticle,
+  delArticle,
+  putArticle
+}
