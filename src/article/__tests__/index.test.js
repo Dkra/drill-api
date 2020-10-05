@@ -1,6 +1,15 @@
-const { async } = require('regenerator-runtime')
 import axios from 'axios'
-import { buildArticle } from '../../utils/testHelper'
+import {
+  buildArticle
+} from '../../utils/testHelper'
+import startServer from '../../startServer'
+
+let server;
+beforeAll(async () => {
+  server = await startServer()
+})
+
+afterAll(() => server.close())
 
 test('Article CRUD integration test', async () => {
   const body = {
@@ -9,10 +18,33 @@ test('Article CRUD integration test', async () => {
   }
   const expectedData = buildArticle(body)
   console.log('expectedData', expectedData)
-  const createdData = await axios.post('http://localhost:5000/article/', body)
+  const {
+    data: CData
+  } = await axios.post(`http://${server.address().port}/articles/`, body)
 
   // Create
-  expect(createdData).toMatchObject(expectedData)
+  expect(CData).toMatchObject(expectedData)
+
+  // Read
+
+  // Update
+
+  // Delete
+})
+
+test('Article CRUD integration test', async () => {
+  const body = {
+    title: 'my title',
+    content: 'my content',
+  }
+  const expectedData = buildArticle(body)
+  console.log('expectedData', expectedData)
+  const {
+    data: CData
+  } = await axios.post(`http://${server.address().port}/articles/`, body)
+
+  // Create
+  expect(CData).toMatchObject(expectedData)
 
   // Read
 
