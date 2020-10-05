@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime' // move to jest setup file
 import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
@@ -40,7 +39,7 @@ test('createArticle()', async () => {
   expect(res.json).toHaveBeenCalledWith(dummyItem)
 })
 
-test.only('createArticle() return 404 if no [title] provided', async () => {
+test('createArticle() return 404 if no [title] provided', async () => {
   // Arrange
   const parmas = {
     // title: 'my title',
@@ -64,7 +63,7 @@ test.only('createArticle() return 404 if no [title] provided', async () => {
   `)
 })
 
-test.only('createArticle() return 404 if no [content] provided', async () => {
+test('createArticle() return 404 if no [content] provided', async () => {
   // Arrange
   const parmas = {
     title: 'my title',
