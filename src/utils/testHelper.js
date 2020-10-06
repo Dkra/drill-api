@@ -1,9 +1,4 @@
-let idCounter = 0
-function buildArticle({
-  title = 'default title',
-  content = 'default content',
-}) {
-  idCounter++
+function buildArticle({ idCounter = 1, title, content }) {
   return {
     _id: idCounter,
     title: `id:${idCounter} ${title} `,
@@ -31,4 +26,4 @@ function buildNext(impl) {
   return jest.fn(impl).mockName('next')
 }
 
-export { buildArticle, buildReq, buildRes }
+export { buildArticle, buildReq, buildRes, buildNext }

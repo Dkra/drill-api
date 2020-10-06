@@ -14,7 +14,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-test('createArticle()', async () => {
+test('createArticle() happy path', async () => {
   // Arrange
   const parmas = {
     title: 'my title',

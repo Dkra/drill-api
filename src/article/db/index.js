@@ -1,3 +1,5 @@
+import { buildArticle } from '../../utils/testHelper'
+
 let idCounter = 0
 let articleDB = {
   article: [],
@@ -6,11 +8,13 @@ let articleDB = {
 
 const add = ({ title, content }) => {
   idCounter++
-  articleDB['article'].push({
-    _id: idCounter,
-    title: `id:${idCounter} ${title} `,
-    content: `id:${idCounter} ${content} `,
-  })
+  articleDB['article'].push(
+    buildArticle({
+      idCounter,
+      title,
+      content,
+    }),
+  )
   articleDB.count++
 
   return new Promise((res, rej) => {
