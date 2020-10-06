@@ -1,3 +1,4 @@
+// Support async/await syntax
 const { async } = require('regenerator-runtime')
 
 // Random port for each test file

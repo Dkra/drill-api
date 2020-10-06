@@ -16,7 +16,6 @@ test('Article CRUD integration test', async () => {
   }
   const _id = 1
   const expectedData = buildArticle(body)
-  // console.log('expectedData', expectedData)
   const {
     data: { article: CData },
   } = await axios.post(
@@ -26,6 +25,7 @@ test('Article CRUD integration test', async () => {
 
   // Create
   expect(CData).toMatchObject([{ ...expectedData, _id }])
+  expect(CData.length).toBe(1)
 
   // Read
   const {
@@ -46,5 +46,18 @@ test('Article CRUD integration test', async () => {
   )
   expect(uData).toMatchObject([{ ...updated, _id }])
 
+  // Real-All (create one more article, expected length 2)
+  const {
+    data: { article: rAllData },
+  } = await axios.post(
+    `http://localhost:${server.address().port}/articles/`,
+    body,
+  )
+  expect(rAllData.length).toBe(2)
+
   // Delete
+  const {
+    data: { article: delData },
+  } = await axios.delete(`http://localhost:${server.address().port}/articles/1`)
+  expect(delData.length).toBe(1)
 })
