@@ -1,19 +1,19 @@
 import memoryDB from '../db'
 
 export default class ArticleModel {
-  read() {
-    return memoryDB.read
+  static add({ title, content }) {
+    return memoryDB.add({ title, content })
   }
-  add() {
-    return memoryDB.add
+  static getAll() {
+    return memoryDB.getAll
   }
-  readAll() {
-    return memoryDB.readAll
+  static get(id) {
+    return memoryDB.get(id)
   }
-  remove() {
-    return memoryDB.remove
+  static update({ _id, title, content }) {
+    return memoryDB.update({ _id, title, content })
   }
-  update() {
-    return memoryDB.update
+  static remove(id) {
+    return memoryDB.remove(id)
   }
 }

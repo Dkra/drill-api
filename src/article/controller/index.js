@@ -1,5 +1,5 @@
 import BadRequestError from '../../utils/error'
-import articleDB from '../db'
+import ArticleModel from '../model'
 
 /*
   Controller
@@ -23,27 +23,25 @@ async function createArticle(req, res, next) {
     return
   }
 
-  const createdArticle = await articleDB
-    .add({
-      title,
-      content,
-    })
-    .catch((error) => next(new BadRequestError(error)))
+  const createdArticle = await ArticleModel.add({
+    title,
+    content,
+  }).catch((error) => next(new BadRequestError(error)))
 
   res.json(createdArticle)
 }
 
 // Read-all
 async function getArticles(req, res, next) {
-  const getAllArticle = await articleDB.readAll()
+  const getAllArticle = await ArticleModel.getAll()
   res.json(getAllArticle)
 }
 
 // Read
 async function getArticle(req, res, next) {
-  const getArticle = await articleDB
-    .read(req.params.id)
-    .catch((error) => next(new BadRequestError(error)))
+  const getArticle = await ArticleModel.get(req.params.id).catch((error) =>
+    next(new BadRequestError(error)),
+  )
   res.json(getArticle)
 }
 
@@ -61,23 +59,20 @@ async function putArticle(req, res, next) {
       message: `no content provided!`,
     })
 
-  const data = await articleDB
-    .update({
-      _id: id,
-      title,
-      content,
-    })
-    .catch((error) => next(new BadRequestError(error)))
-  console.log('data', data)
+  const data = await ArticleModel.update({
+    _id: id,
+    title,
+    content,
+  }).catch((error) => next(new BadRequestError(error)))
   res.json(data)
 }
 
 // Delete
 async function delArticle(req, res, next) {
   const { id } = req.params
-  const data = await articleDB
-    .remove(id)
-    .catch((error) => next(new BadRequestError(error)))
+  const data = await ArticleModel.remove(id).catch((error) =>
+    next(new BadRequestError(error)),
+  )
   res.json(data)
 }
 

@@ -22,7 +22,7 @@ const add = ({ title, content }) => {
   })
 }
 
-const read = (id) =>
+const get = (id) =>
   new Promise((res, rej) => {
     const article = articleDB.article.filter((a) => a._id === +id)
     if (!article.length) rej(`Article Id:${id} not found!`)
@@ -32,7 +32,7 @@ const read = (id) =>
     })
   })
 
-const readAll = (id) => new Promise((res, rej) => res(articleDB))
+const getAll = () => new Promise((res, rej) => res(articleDB))
 
 const update = ({ _id, title, content }) =>
   new Promise((res, rej) => {
@@ -60,7 +60,6 @@ const remove = (id) =>
         throw new Error(`Article Id:${id} not found!`)
 
       articleDB.count = articleDB.article.length
-      console.log('articleDB', articleDB)
       res(articleDB)
     } catch (err) {
       rej(`${err}`)
@@ -68,9 +67,9 @@ const remove = (id) =>
   })
 
 export default {
-  read,
+  get,
   add,
-  readAll,
+  getAll,
   remove,
   update,
 }
