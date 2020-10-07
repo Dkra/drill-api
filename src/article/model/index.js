@@ -5,7 +5,7 @@ export default class ArticleModel {
     return memoryDB.add({ title, content })
   }
   static getAll() {
-    return memoryDB.getAll
+    return memoryDB.getAll()
   }
   static get(id) {
     return memoryDB.get(id)
