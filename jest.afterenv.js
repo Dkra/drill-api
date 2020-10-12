@@ -4,12 +4,11 @@
  immediately after thetest framework has been installed in the environment.
 */
 
-jest.setTimeout(10000) // in milliseconds
+jest.setTimeout(15000) // in milliseconds
 
 // Support async/await syntax
 const { async } = require('regenerator-runtime')
 
 // Random port for each test file
-const port =
-  Number(process.env.SEVER_RUNNING_PORT) + Number(process.env.JEST_WORKER_ID)
+const port = 8800 + Number(process.env.JEST_WORKER_ID)
 process.env.PORT = process.env.PORT || port

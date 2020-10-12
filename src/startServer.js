@@ -6,15 +6,9 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import article from './article'
 
-const {
-  PORT
-} = process.env
+const { PORT } = process.env
 
-
-function startServer({
-  port = PORT
-} = {}) {
-
+function startServer({ port = PORT } = {}) {
   const app = express()
 
   app.use(bodyParser.json())
@@ -46,21 +40,34 @@ function startServer({
     })
   })
 
-  return new Promise((res, rej) => {
-    try {
-      const server = app.listen(port, () => {
-        console.info(`Listening on port ${server.address().port}`)
-        const originalClose = server.close.bind(server)
-        server.close = () => {
-          return new Promise(resolveClose => {
-            originalClose(resolveClose)
-          })
-        }
-        res(server)
-      })
-    } catch (err) {
-      rej(err)
-    }
+  // return new Promise((res, rej) => {
+  //   try {
+  //     const server = app.listen(port, () => {
+  //       console.info(`Listening on port ${server.address().port}`)
+  //       const originalClose = server.close.bind(server)
+  //       server.close = () => {
+  //         return new Promise((resolveClose) => {
+  //           originalClose(resolveClose)
+  //         })
+  //       }
+  //       res(server)
+  //     })
+  //   } catch (err) {
+  //     rej(err)
+  //   }
+  // })
+  return new Promise((resolve) => {
+    const server = app.listen(port, () => {
+      // console.info(`Listening on port ${server.address().port}`)
+      console.info('PORT', PORT, new Date().getMilliseconds())
+      const originalClose = server.close.bind(server)
+      server.close = () => {
+        return new Promise((resolveClose) => {
+          originalClose(resolveClose)
+        })
+      }
+      resolve(server)
+    })
   })
 }
 export default startServer
