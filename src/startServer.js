@@ -6,9 +6,13 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import article from './article'
 
-const { PORT } = process.env
+const {
+  PORT
+} = process.env
 
-function startServer({ port = PORT } = {}) {
+function startServer({
+  port = PORT
+} = {}) {
   const app = express()
 
   app.use(bodyParser.json())
@@ -58,7 +62,6 @@ function startServer({ port = PORT } = {}) {
   // })
   return new Promise((resolve) => {
     const server = app.listen(port, () => {
-      // console.info(`Listening on port ${server.address().port}`)
       console.info('PORT', PORT, new Date().getMilliseconds())
       const originalClose = server.close.bind(server)
       server.close = () => {

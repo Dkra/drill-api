@@ -14,15 +14,14 @@ afterAll(() => server.close())
 
 test('Integration [createArticle]', async () => {
   const {
-    CData,
-    expectedData,
     _id
   } = await addArticle(axios, server)
 
-  // Create
-  expect(CData).toMatchObject([{
-    ...expectedData,
-    _id
-  }])
-  expect(CData.length).toBe(1)
+  // Delete
+  const {
+    data: {
+      article: delData
+    },
+  } = await axios.delete(`http://localhost:${server.address().port}/articles/${_id}`)
+  expect(delData.length).toBe(0)
 })

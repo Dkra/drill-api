@@ -14,15 +14,22 @@ afterAll(() => server.close())
 
 test('Integration [createArticle]', async () => {
   const {
-    CData,
-    expectedData,
     _id
   } = await addArticle(axios, server)
 
-  // Create
-  expect(CData).toMatchObject([{
-    ...expectedData,
-    _id
+  // Update
+  const updated = {
+    title: 'new title',
+    content: 'new title',
+  }
+  const {
+    data: uData
+  } = await axios.put(
+    `http://localhost:${server.address().port}/articles/${_id}`,
+    updated,
+  )
+  expect(uData).toMatchObject([{
+    ...updated,
+    _id,
   }])
-  expect(CData.length).toBe(1)
 })
