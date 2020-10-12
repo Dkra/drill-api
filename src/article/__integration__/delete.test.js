@@ -12,16 +12,16 @@ beforeAll(async () => {
 
 afterAll(() => server.close())
 
-test('Integration [createArticle]', async () => {
+test('Integration [deleteArticle]', async () => {
   const {
     _id
   } = await addArticle(axios, server)
 
   // Delete
   const {
-    data: {
-      article: delData
-    },
+    data: delData
   } = await axios.delete(`http://localhost:${server.address().port}/articles/${_id}`)
-  expect(delData.length).toBe(0)
+  expect(delData).toEqual({
+    success: true
+  })
 })

@@ -1,4 +1,6 @@
-import { buildArticle } from '../../utils/testHelper'
+import {
+  buildArticle
+} from '../../utils/testHelper'
 
 let idCounter = 0
 let articleDB = {
@@ -6,7 +8,10 @@ let articleDB = {
   count: 0,
 }
 
-const add = ({ title, content }) => {
+const add = ({
+  title,
+  content
+}) => {
   idCounter++
   articleDB['article'].push(
     buildArticle({
@@ -34,7 +39,11 @@ const get = (id) =>
 
 const getAll = () => new Promise((res, rej) => res(articleDB))
 
-const update = ({ _id, title, content }) =>
+const update = ({
+    _id,
+    title,
+    content
+  }) =>
   new Promise((res, rej) => {
     let updatedItem
     // update
@@ -60,7 +69,9 @@ const remove = (id) =>
         throw new Error(`Article Id:${id} not found!`)
 
       articleDB.count = articleDB.article.length
-      res(articleDB)
+      res({
+        success: true
+      })
     } catch (err) {
       rej(`${err}`)
     }
