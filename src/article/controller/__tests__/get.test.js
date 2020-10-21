@@ -1,4 +1,9 @@
-import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
+import {
+  buildNext,
+  buildArticle,
+  buildReq,
+  buildRes,
+} from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
   createArticle,
@@ -22,13 +27,15 @@ test('getArticle() happy path', async () => {
   }
   const req = buildReq({ params: { id: 1 } })
   const res = buildRes()
+  const next = buildNext()
+
   const dummyItem = [buildArticle(params)]
 
   articleDB.get.mockResolvedValue(dummyItem)
 
   // Act
   console.log('req', req)
-  await getArticle(req, res)
+  await getArticle(req, res, next)
 
   // Assert
   expect(articleDB.get).toHaveBeenCalledTimes(1)
@@ -46,18 +53,16 @@ test('createArticle() return 404 if no [title] provided', async () => {
   }
   const req = buildReq({ body: parmas })
   const res = buildRes()
+  const next = buildNext()
 
   // Act
-  await createArticle(req, res)
+  await createArticle(req, res, next)
 
   // Assert
-  expect(res.status).toHaveBeenCalledWith(400)
-  expect(res.json).toHaveBeenCalledTimes(1)
-  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "message": "no title provided!",
-        },
-      ]
-    `)
+  expect(next).toHaveBeenCalledTimes(1)
+  expect(next.mock.calls[0]).toMatchInlineSnapshot(`
+    Array [
+      [Error: no title provided!!!],
+    ]
+  `)
 })

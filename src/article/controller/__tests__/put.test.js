@@ -1,4 +1,9 @@
-import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
+import {
+  buildArticle,
+  buildReq,
+  buildRes,
+  buildNext,
+} from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
   createArticle,
@@ -28,6 +33,8 @@ test('putArticle() happy path', async () => {
     body: params,
   })
   const res = buildRes()
+  const next = buildNext()
+
   const dummyItem = buildArticle({
     ...params,
     idCounter: id,
@@ -36,7 +43,7 @@ test('putArticle() happy path', async () => {
   articleDB.update.mockResolvedValue(dummyItem)
 
   // Act
-  await putArticle(req, res)
+  await putArticle(req, res, next)
 
   // Assert
   expect(articleDB.update).toHaveBeenCalledTimes(1)
@@ -62,18 +69,16 @@ test('putArticle() return 404 if no [title] & [content] provided', async () => {
     body: params,
   })
   const res = buildRes()
+  const next = buildNext()
 
   // Act
-  await putArticle(req, res)
+  await putArticle(req, res, next)
 
   // Assert
-  expect(res.status).toHaveBeenCalledWith(400)
-  expect(res.json).toHaveBeenCalledTimes(1)
-  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(next).toHaveBeenCalledTimes(1)
+  expect(next.mock.calls[0]).toMatchInlineSnapshot(`
     Array [
-      Object {
-        "message": "no title provided!",
-      },
+      [Error: no title provided!],
     ]
   `)
 })

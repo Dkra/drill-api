@@ -1,4 +1,4 @@
-import BadRequestError from '../../utils/error'
+import { BadRequest } from '../../utils/errors'
 import ArticleModel from '../model'
 
 /*
@@ -7,31 +7,26 @@ import ArticleModel from '../model'
 
 // Create
 async function createArticle(req, res, next) {
-  const {
-    title,
-    content
-  } = req.body
+  const { title, content } = req.body
 
-  if (title === undefined) {
-    res.status(400).json({
-      message: `no title provided!`,
+  try {
+    if (title === undefined) {
+      throw new BadRequest('no title provided!!!')
+    }
+
+    if (content === undefined) {
+      throw new BadRequest('no content provided!')
+    }
+
+    const createdArticle = await ArticleModel.add({
+      title,
+      content,
     })
-    return
+
+    res.json(createdArticle)
+  } catch (err) {
+    next(err)
   }
-
-  if (content === undefined) {
-    res.status(400).json({
-      message: `no content provided!`,
-    })
-    return
-  }
-
-  const createdArticle = await ArticleModel.add({
-    title,
-    content,
-  }).catch((error) => next(new BadRequestError(error)))
-
-  res.json(createdArticle)
 }
 
 // Read-all
@@ -50,51 +45,36 @@ async function getArticle(req, res, next) {
 
 // update
 async function putArticle(req, res, next) {
-  const {
-    id
-  } = req.params
-  const {
-    title,
-    content
-  } = req.body
+  try {
+    const { id } = req.params
+    const { title, content } = req.body
 
-  if (title === undefined) {
-    res.status(400).json({
-      message: `no title provided!`,
+    if (title === undefined) {
+      throw new BadRequest('no title provided!')
+    }
+
+    if (content === undefined) {
+      throw new BadRequest('no content provided!')
+    }
+
+    const data = await ArticleModel.update({
+      _id: id,
+      title,
+      content,
     })
-    return
+    res.json(data)
+  } catch (err) {
+    next(err)
   }
-
-  if (content === undefined) {
-    res.status(400).json({
-      message: `no content provided!`,
-    })
-    return
-  }
-
-  const data = await ArticleModel.update({
-    _id: id,
-    title,
-    content,
-  }).catch((error) => next(new BadRequestError(error)))
-  res.json(data)
 }
 
 // Delete
 async function delArticle(req, res, next) {
-  const {
-    id
-  } = req.params
+  const { id } = req.params
   const data = await ArticleModel.remove(id).catch((error) =>
     next(new BadRequestError(error)),
   )
   res.json(data)
 }
 
-export {
-  createArticle,
-  getArticles,
-  getArticle,
-  delArticle,
-  putArticle
-}
+export { createArticle, getArticles, getArticle, delArticle, putArticle }

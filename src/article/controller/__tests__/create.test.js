@@ -1,4 +1,9 @@
-import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
+import {
+  buildArticle,
+  buildReq,
+  buildRes,
+  buildNext,
+} from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
   createArticle,
@@ -47,18 +52,16 @@ test('createArticle() return 404 if no [title] provided', async () => {
   }
   const req = buildReq({ body: parmas })
   const res = buildRes()
+  const next = buildNext()
 
   // Act
-  await createArticle(req, res)
+  await createArticle(req, res, next)
 
   // Assert
-  expect(res.status).toHaveBeenCalledWith(400)
-  expect(res.json).toHaveBeenCalledTimes(1)
-  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(next).toHaveBeenCalledTimes(1)
+  expect(next.mock.calls[0]).toMatchInlineSnapshot(`
     Array [
-      Object {
-        "message": "no title provided!",
-      },
+      [Error: no title provided!!!],
     ]
   `)
 })
@@ -71,18 +74,16 @@ test('createArticle() return 404 if no [content] provided', async () => {
   }
   const req = buildReq({ body: parmas })
   const res = buildRes()
+  const next = buildNext()
 
   // Act
-  await createArticle(req, res)
+  await createArticle(req, res, next)
 
   // Assert
-  expect(res.status).toHaveBeenCalledWith(400)
-  expect(res.json).toHaveBeenCalledTimes(1)
-  expect(res.json.mock.calls[0]).toMatchInlineSnapshot(`
+  expect(next).toHaveBeenCalledTimes(1)
+  expect(next.mock.calls[0]).toMatchInlineSnapshot(`
     Array [
-      Object {
-        "message": "no content provided!",
-      },
+      [Error: no content provided!],
     ]
   `)
 })
