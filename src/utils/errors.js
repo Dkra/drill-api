@@ -1,6 +1,7 @@
 class GeneralError extends Error {
   constructor(message) {
     super()
+    this.status = 'error'
     this.message = message
   }
 
