@@ -70,11 +70,13 @@ async function putArticle(req, res, next) {
 
 // Delete
 async function delArticle(req, res, next) {
-  const { id } = req.params
-  const data = await ArticleModel.remove(id).catch((error) =>
-    next(new BadRequestError(error)),
-  )
-  res.json(data)
+  try {
+    const { id } = req.params
+    const data = await ArticleModel.remove(id)
+    res.json(data)
+  } catch (err) {
+    next(err)
+  }
 }
 
 export { createArticle, getArticles, getArticle, delArticle, putArticle }

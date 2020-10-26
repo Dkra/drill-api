@@ -1,8 +1,4 @@
-import {
-  buildArticle,
-  buildReq,
-  buildRes
-} from '../../../utils/testHelper'
+import { buildArticle, buildReq, buildRes } from '../../../utils/testHelper'
 import articleDB from '../../db'
 import {
   createArticle,
@@ -29,15 +25,14 @@ describe('delArticle()', () => {
     }
     const req = buildReq({
       params: {
-        id
+        id,
       },
       body: params,
     })
     const res = buildRes()
 
-
     articleDB.remove.mockResolvedValue({
-      success: true
+      success: true,
     })
 
     // Act
@@ -49,7 +44,7 @@ describe('delArticle()', () => {
 
     expect(res.json).toHaveBeenCalledTimes(1)
     expect(res.json).toHaveBeenCalledWith({
-      success: true
+      success: true,
     })
   })
 })

@@ -12,6 +12,10 @@ class GeneralError extends Error {
       return 404
     }
 
+    // Redirect
+
+    // More...
+
     return 500
   }
 }

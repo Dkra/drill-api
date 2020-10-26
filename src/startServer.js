@@ -26,6 +26,7 @@ function startServer({ port = PORT } = {}) {
     }
   })
 
+  // Error Middleware
   app.use(handleErrors)
 
   return new Promise((resolve) => {

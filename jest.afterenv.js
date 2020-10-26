@@ -7,9 +7,7 @@
 jest.setTimeout(10000) // in milliseconds
 
 // Support async/await syntax
-const {
-  async
-} = require('regenerator-runtime')
+const { async } = require('regenerator-runtime')
 
 // Random port for each test file
 // const port = 8800 + Number(process.env.JEST_WORKER_ID)
