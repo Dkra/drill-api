@@ -2,7 +2,10 @@ import 'dotenv/config'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import express from 'express'
-const handleErrors = require('./middleware/handleErrors')
+import morgan from 'morgan'
+import winston from 'winston'
+import handleErrors from './middleware/handleErrors'
+import createLogger from './utils/logger'
 import bodyParser from 'body-parser'
 import article from './article'
 
@@ -12,6 +15,12 @@ function startServer({ port = PORT } = {}) {
   const app = express()
 
   app.use(bodyParser.json())
+
+  // Logger
+  const logger = createLogger() // Winston
+
+  // streamed with ist and utc
+  app.use(morgan('combined', { stream: logger.stream.write })) // Morgon - HTTP request logger middleware
 
   // Routing
   app.get('/', (req, res) => {
