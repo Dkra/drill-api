@@ -8,10 +8,12 @@ import handleErrors from './middleware/handleErrors'
 import createLogger from './utils/logger'
 import bodyParser from 'body-parser'
 import article from './article'
+import startMongoConnection from './utils/mongoConnection'
 
 const { PORT } = process.env
 
 function startServer({ port = PORT } = {}) {
+  startMongoConnection()
   const app = express()
 
   app.use(bodyParser.json())
