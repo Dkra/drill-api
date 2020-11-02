@@ -68,7 +68,7 @@ import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
 // May require additional time for downloading MongoDB binaries
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000 // default 600000
 
 let mongoServer
 const opts = { useNewUrlParser: true, useUnifiedTopology: true }
