@@ -1,10 +1,4 @@
 // const mongoose = require('mongoose')
-// const ArticleModel = require('../ArticleModel')
-
-// const articleData = {
-//   title: 'my title',
-//   content: 'my content',
-// }
 
 // const databaseName = 'drill'
 
@@ -66,6 +60,12 @@
 
 import mongoose from 'mongoose'
 import { setupMongooseMongoMemoryDB } from '../../../utils/modelTestingUtils'
+const { add } = require('../index.js')
+
+const articleData = {
+  title: 'my title',
+  content: 'my content',
+}
 
 let mongoServer
 
@@ -78,10 +78,11 @@ afterAll(async () => {
   await mongoServer.stop()
 })
 
-describe('...', () => {
-  it('...', async () => {
-    const User = mongoose.model('User', new mongoose.Schema({ name: String }))
-    const count = await User.countDocuments()
-    expect(count).toEqual(0)
+describe('Article Model Test', () => {
+  it('create & save article successfully', async () => {
+    expect(await ArticleModel.countDocuments()).toEqual(0)
+
+    await ArticleModel.create(articleData)
+    expect(await ArticleModel.countDocuments()).toEqual(1)
   })
 })
