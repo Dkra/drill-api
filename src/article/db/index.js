@@ -1,5 +1,9 @@
 const ArticleModel = require('./ArticleModel')
-const get = () => {}
+
+const get = (id) => {
+  return ArticleModel.findById(id)
+}
+
 const add = ({ title, content }) => {
   if (!title || !content) {
     throw new Error('parameter missing!')
@@ -8,8 +12,22 @@ const add = ({ title, content }) => {
   }
 }
 const getAll = () => {}
-const remove = () => {}
-const update = () => {}
+
+const update = ({ _id, title, content }) => {
+  // At least one of "title" or "content" is passing
+  const updateObj = {}
+  if (title !== undefined) updateObj.title = title
+  if (content !== undefined) updateObj.content = content
+
+  return ArticleModel.findByIdAndUpdate(_id, updateObj, {
+    // If you set new: true, findOneAndUpdate() will instead give you the object after update was applied
+    new: true,
+  })
+}
+
+const remove = (_id) => {
+  return ArticleModel.deleteOne({ _id })
+}
 
 export default {
   get,
@@ -18,3 +36,4 @@ export default {
   remove,
   update,
 }
+export { get, add, getAll, remove, update }
