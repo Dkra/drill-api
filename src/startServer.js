@@ -42,7 +42,7 @@ function startServer({ port = PORT } = {}) {
 
   return new Promise((resolve) => {
     const server = app.listen(port, () => {
-      console.info('PORT', PORT, new Date().getMilliseconds())
+      console.info('PORT:', PORT, 'TimeAt:', new Date().getMilliseconds())
       const originalClose = server.close.bind(server)
       server.close = () => {
         return new Promise((resolveClose) => {

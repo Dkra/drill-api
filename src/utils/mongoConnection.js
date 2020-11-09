@@ -25,10 +25,10 @@ const startMongoConnection = () => {
   })
 
   // Test action
-  // mongoose.connect(`${uri}`, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // })
+  mongoose.connect(`${uri}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
 
   // const Cat = mongoose.model('Cat', { name: String })
 

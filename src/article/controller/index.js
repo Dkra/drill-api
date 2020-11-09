@@ -25,22 +25,19 @@ async function createArticle(req, res, next) {
 
     res.json(createdArticle)
   } catch (err) {
+    console.log('err!!!!!!', err)
     next(err)
   }
 }
 
-// Read-all
-async function getArticles(req, res, next) {
-  const getAllArticle = await ArticleModel.getAll()
-  res.json(getAllArticle)
-}
-
 // Read
 async function getArticle(req, res, next) {
-  const getArticle = await ArticleModel.get(req.params.id).catch((error) =>
-    next(new BadRequestError(error)),
-  )
-  res.json(getArticle)
+  try {
+    const getArticle = await ArticleModel.get(req.params.id)
+    res.json(getArticle)
+  } catch (err) {
+    next(err)
+  }
 }
 
 // update
@@ -79,4 +76,4 @@ async function delArticle(req, res, next) {
   }
 }
 
-export { createArticle, getArticles, getArticle, delArticle, putArticle }
+export { createArticle, getArticle, delArticle, putArticle }

@@ -5,13 +5,7 @@ import {
   buildNext,
 } from '../../../utils/testHelper'
 import articleDB from '../../db'
-import {
-  createArticle,
-  getArticles,
-  getArticle,
-  delArticle,
-  putArticle,
-} from '../'
+import { createArticle } from '../'
 
 jest.mock('../../db')
 
