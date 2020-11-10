@@ -1,9 +1,7 @@
 import axios from 'axios'
 
 import startServer from '../../startServer'
-import {
-  addArticle
-} from './utils'
+import { addArticle } from './utils'
 
 let server
 beforeAll(async () => {
@@ -13,23 +11,17 @@ beforeAll(async () => {
 afterAll(() => server.close())
 
 test('Integration [createArticle]', async () => {
-  const {
-    _id
-  } = await addArticle(axios, server)
+  const { _id } = await addArticle(axios, server)
 
   // Update
-  const updated = {
+  const updateBody = {
     title: 'new title',
     content: 'new title',
   }
-  const {
-    data: uData
-  } = await axios.put(
+  const { data: uData } = await axios.put(
     `http://localhost:${server.address().port}/articles/${_id}`,
-    updated,
+    updateBody,
   )
-  expect(uData).toMatchObject([{
-    ...updated,
-    _id,
-  }])
+  expect(uData.title).toEqual(updateBody.title)
+  expect(uData.content).toEqual(updateBody.content)
 })

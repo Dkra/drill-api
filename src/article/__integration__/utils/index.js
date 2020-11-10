@@ -14,6 +14,7 @@ export const addArticle = async (axiosInstance, server, id = 1) => {
   )
   return {
     CData: {
+      _id,
       title,
       content,
     },

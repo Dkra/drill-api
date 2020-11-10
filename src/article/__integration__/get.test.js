@@ -1,7 +1,6 @@
 import axios from 'axios'
 import startServer from '../../startServer'
 import { addArticle } from './utils'
-import { async } from 'regenerator-runtime'
 
 let server
 beforeAll(async () => {
@@ -14,17 +13,10 @@ test('Integration [getArticle]', async () => {
   const { expectedData, _id } = await addArticle(axios, server)
 
   // Read
-  const {
-    data: { article: rData },
-  } = await axios.get(
+  const { data: rData } = await axios.get(
     `http://localhost:${server.address().port}/articles/${_id}`,
   )
-  expect(rData).toMatchObject([
-    {
-      ...expectedData,
-      _id,
-    },
-  ])
+  expect(rData).toEqual(expect.objectContaining(expectedData))
 })
 
 // https://www.moesif.com/blog/technical/api-design/REST-API-Design-Filtering-Sorting-and-Pagination/

@@ -11,18 +11,8 @@ beforeAll(async () => {
 afterAll(() => server.close())
 
 test('Integration [createArticle]', async () => {
-  try {
-    const { CData, expectedData, _id } = await addArticle(axios, server)
+  const { CData, expectedData } = await addArticle(axios, server)
 
-    // Create
-    expect(CData).toMatchObject([
-      {
-        ...expectedData,
-        _id,
-      },
-    ])
-    expect(CData.length).toBe(1)
-  } catch (err) {
-    console.log('err', err)
-  }
+  // Create
+  expect(CData).toEqual(expect.objectContaining(expectedData))
 })
