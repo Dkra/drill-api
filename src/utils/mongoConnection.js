@@ -1,19 +1,5 @@
-// const MongoClient = require('mongodb').MongoClient
-
-// const startMongoConnection = () => {
-//   const dbName = 'drill'
-//   const passwd = 'asdfasdf' // password for the admin user
-//   const uri = `mongodb+srv://admin:${passwd}@cluster0.qrebf.mongodb.net/${dbName}?retryWrites=true&w=majority`
-//   const client = new MongoClient(uri, { useNewUrlParser: true })
-//   client.connect((err) => {
-//     const collection = client.db(`${dbName}`).collection('users')
-//     // perform actions on the collection object
-//     client.close()
-//   })
-// }
-
 const mongoose = require('mongoose')
-// mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+import RoleModel, { Roles } from '../models/role.model'
 
 const startMongoConnection = () => {
   const uri = process.env['MONGO_ATLAS_URI']
@@ -30,9 +16,33 @@ const startMongoConnection = () => {
     useUnifiedTopology: true,
   })
 
-  // const Cat = mongoose.model('Cat', { name: String })
-
-  // const kitty = new Cat({ name: 'Roger' })
-  // kitty.save().then(() => console.log('meow'))
+  // Initial setup for Roles
+  initialRoleSetup()
 }
 export default startMongoConnection
+
+function initialRoleSetup() {
+  RoleModel.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new RoleModel({
+        name: Roles.USER,
+      }).save((err) => {
+        if (err) {
+          console.log('error', err)
+        }
+
+        console.log("added 'user' to roles collection")
+      })
+
+      new RoleModel({
+        name: Roles.ADMIN,
+      }).save((err) => {
+        if (err) {
+          console.log('error', err)
+        }
+
+        console.log("added 'admin' to roles collection")
+      })
+    }
+  })
+}
