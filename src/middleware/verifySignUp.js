@@ -5,36 +5,42 @@ import { GeneralError, BadRequest } from '../utils/errors'
 export const checkDuplicateUsernameOrEmail = async (req, res, next) => {
   try {
     // Username
-    await UserModel.findOne({
-      username: req.body.username,
-    }).exec((err, user) => {
-      if (err) {
-        throw new Error('err', err)
-        return
-      }
+    const findByName = await UserModel.findOne(
+      {
+        username: req.body.username,
+      },
+      (err, user) => {
+        if (err) {
+          throw new Error('err', err)
+          return
+        }
 
-      if (user) {
-        throw new BadRequest('Failed! Username is already taken!')
-        return
-      }
-    })
-
+        if (user) {
+          throw new BadRequest('Failed! Username is already taken!')
+          return
+        }
+      },
+    )
     // Email
-    await UserModel.findOne({
-      email: req.body.email,
-    }).exec((err, user) => {
-      if (err) {
-        throw new Error('err', err)
-        return
-      }
-
-      if (user) {
-        throw new BadRequest('Failed! Email is already taken!')
-        return
-      }
-    })
+    const findByEmail = await UserModel.findOne(
+      {
+        email: req.body.email,
+      },
+      (err, user) => {
+        if (err) {
+          throw new Error('err', err)
+          return
+        }
+        if (user) {
+          throw new BadRequest('Failed! Email is already taken!')
+          return
+        }
+      },
+    )
     next()
   } catch (err) {
+    console.log('err!!!!!!!!!!!!!!!!!!!!!', err)
+    debugger
     next(err)
   }
 }

@@ -3,7 +3,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 
 async function setupMongooseMongoMemoryDB() {
   // May require additional time for downloading MongoDB binaries
-  jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000 // 600000
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000 // 600000
 
   let mongoServer
   const opts = { useNewUrlParser: true, useUnifiedTopology: true }
@@ -15,7 +15,10 @@ async function setupMongooseMongoMemoryDB() {
   //   console.log('getDbName!!!!!', await mongoServer.getDbName())
   //   console.log('-------------------------------------')
   await mongoose.connect(mongoUri, opts, (err) => {
-    if (err) console.error(err)
+    if (err) {
+      debugger
+      console.error(err)
+    }
     console.log('mongoose conntected to in-memory MongoDB!')
   })
 
