@@ -25,13 +25,7 @@ describe('checkDuplicateUsernameOrEmail()', () => {
     })
   })
 
-  test.skip('happy path', async () => {
-    // await UserModel.create({
-    //   username: 'rogerxx',
-    //   email: 'roger@gmail.comxx',
-    //   password: 'xxxxx',
-    // })
-
+  test('happy path', async () => {
     const req = buildReq({
       body: {
         username: 'roger',
@@ -41,25 +35,15 @@ describe('checkDuplicateUsernameOrEmail()', () => {
     const res = buildRes()
     const next = buildNext()
 
-    await expect(
-      await checkDuplicateUsernameOrEmail(req, res, next),
-    ).resolves.toEqual()
+    await checkDuplicateUsernameOrEmail(req, res, next)
     expect(next).toBeCalledWith()
   })
 
-  //   test('if error occur is taken', () => {})
-  test.only('if username is taken', async () => {
-    debugger
-    try {
-      await UserModel.create({
-        username: 'roger',
-        email: '----------',
-        password: 'xxxxx',
-      })
-    } catch (err) {
-      debugger
-      console.log('err~~~~~~~~', err)
-    }
+  test('if username is taken', async () => {
+    await UserModel.create({
+      username: 'roger',
+      email: '----------',
+    })
 
     const req = buildReq({
       body: {
@@ -69,16 +53,34 @@ describe('checkDuplicateUsernameOrEmail()', () => {
     })
     const res = buildRes()
     const next = buildNext()
-    try {
-      await checkDuplicateUsernameOrEmail(req, res, next)
-      const flushPromises = () => new Promise(setImmediate)
-      await flushPromises()
-      expect(next).toBeCalledWith('Unhandled Username is already taken!')
-      // expect(next.mock.calls[0]).toMatchInlineSnapshot()
-    } catch (err) {
-      debugger
-      console.log('err~~~~~~~~', err)
-    }
+
+    await checkDuplicateUsernameOrEmail(req, res, next).then(() => {
+      expect(next).toBeCalledWith(
+        new BadRequest('Failed! Username is already taken!'),
+      )
+    })
+  })
+
+  test('if email is taken', async () => {
+    await UserModel.create({
+      username: 'brian',
+      email: 'same email',
+    })
+
+    const req = buildReq({
+      body: {
+        username: 'roger',
+        email: 'same email',
+      },
+    })
+    const res = buildRes()
+    const next = buildNext()
+
+    await checkDuplicateUsernameOrEmail(req, res, next).then(() => {
+      expect(next).toBeCalledWith(
+        new BadRequest('Failed! Email is already taken!'),
+      )
+    })
   })
 
   //   test('if email is taken', () => {})
