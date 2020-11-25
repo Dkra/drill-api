@@ -6,12 +6,20 @@ const User = mongoose.model(
     username: String,
     email: String,
     password: String,
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Role',
-      },
-    ],
+    // roles: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Role',
+    //   },
+    // ],
+    role: {
+      type: String,
+      default: 'user',
+      enum: ['user', 'admin'],
+    },
+    accessToken: {
+      type: String,
+    },
   }),
 )
 

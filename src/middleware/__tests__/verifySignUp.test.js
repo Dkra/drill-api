@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
-import { checkDuplicateUsernameOrEmail } from '../verifySignUp'
+import { checkDuplicateEmail } from '../verifySignUp'
 import { buildReq, buildRes, buildNext } from '../../utils/testHelper'
 import { BadRequest } from '../../utils/errors'
 import { setupMongooseMongoMemoryDB } from '../../utils/modelTestingUtils'
 import UserModel from '../../models/user.model'
 
-describe('checkDuplicateUsernameOrEmail()', () => {
+describe('checkDuplicateEmail()', () => {
   let mongoServer
 
   beforeAll(async () => {
@@ -13,7 +13,6 @@ describe('checkDuplicateUsernameOrEmail()', () => {
   })
 
   afterAll(async () => {
-    debugger
     await mongoose.disconnect()
     await mongoServer.stop()
   })
@@ -35,30 +34,8 @@ describe('checkDuplicateUsernameOrEmail()', () => {
     const res = buildRes()
     const next = buildNext()
 
-    await checkDuplicateUsernameOrEmail(req, res, next)
+    await checkDuplicateEmail(req, res, next)
     expect(next).toBeCalledWith()
-  })
-
-  test('if username is taken', async () => {
-    await UserModel.create({
-      username: 'roger',
-      email: '----------',
-    })
-
-    const req = buildReq({
-      body: {
-        username: 'roger',
-        email: '----------',
-      },
-    })
-    const res = buildRes()
-    const next = buildNext()
-
-    await checkDuplicateUsernameOrEmail(req, res, next).then(() => {
-      expect(next).toBeCalledWith(
-        new BadRequest('Failed! Username is already taken!'),
-      )
-    })
   })
 
   test('if email is taken', async () => {
@@ -76,12 +53,10 @@ describe('checkDuplicateUsernameOrEmail()', () => {
     const res = buildRes()
     const next = buildNext()
 
-    await checkDuplicateUsernameOrEmail(req, res, next).then(() => {
+    await checkDuplicateEmail(req, res, next).then(() => {
       expect(next).toBeCalledWith(
         new BadRequest('Failed! Email is already taken!'),
       )
     })
   })
-
-  //   test('if email is taken', () => {})
 })

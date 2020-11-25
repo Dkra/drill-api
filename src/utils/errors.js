@@ -12,6 +12,12 @@ class GeneralError extends Error {
     if (this instanceof NotFound) {
       return 404
     }
+    if (this instanceof Forbidden) {
+      return 403
+    }
+    if (this instanceof Unauthorized) {
+      return 401
+    }
 
     // Redirect
 
@@ -22,7 +28,9 @@ class GeneralError extends Error {
 }
 
 class BadRequest extends GeneralError {}
+class Forbidden extends GeneralError {}
+class Unauthorized extends GeneralError {}
 class NotFound extends GeneralError {}
 
-export { GeneralError, BadRequest, NotFound }
+export { GeneralError, BadRequest, NotFound, Unauthorized, Forbidden }
 export default GeneralError

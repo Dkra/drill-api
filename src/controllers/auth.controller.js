@@ -1,40 +1,43 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { BadRequest } from '../utils/errors'
-import { checkDuplicateUsernameOrEmail } from '../middleware/verifySignUp'
+import { checkDuplicateEmail } from '../middleware/verifySignUp'
 import UserModel from '../models/user.model'
+import config from '../config/auth.config'
 
-export const signUp = (req, res, next) => {
+export const signUp = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body
+    const { email, password, role } = req.body
 
     // field is required
-    if (!username || !email || !password) {
+    if (!email || !password) {
       const field = []
-      if (!username) field.push('username')
       if (!email) field.push('email')
       if (!password) field.push('password')
       throw new BadRequest(`${field.join(' ,')} is required!`)
     }
-    // check if username, email exist
-    checkDuplicateUsernameOrEmail(req, res, next)
+    // check if email exist
+    await checkDuplicateEmail(req, res, next)
 
     // if not, save user to db
     const newUser = new UserModel({
-      username: username,
       email: email,
       password: bcrypt.hashSync(password, 8),
+      role: role || 'user',
     })
 
-    newUser.save((err, user) => {
-      if (err) {
-        throw new Error(err)
-        return
-      }
+    const accessToken = jwt.sign({ userId: newUser._id }, config.secret, {
+      expiresIn: '1d',
+    })
+    newUser.accessToken = accessToken
+    await newUser.save()
 
-      res.send({ message: 'User was registered successfully!' })
+    res.json({
+      data: newUser,
+      accessToken,
     })
   } catch (err) {
+    console.log('err', err)
     next(err)
   }
 }

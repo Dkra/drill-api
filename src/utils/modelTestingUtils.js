@@ -16,7 +16,6 @@ async function setupMongooseMongoMemoryDB() {
   //   console.log('-------------------------------------')
   await mongoose.connect(mongoUri, opts, (err) => {
     if (err) {
-      debugger
       console.error(err)
     }
     console.log('mongoose conntected to in-memory MongoDB!')
