@@ -21,14 +21,11 @@ export const signUp = async (req, res, next) => {
 
     // if not, save user to db
     const newUser = new UserModel({
-      email: email,
-      password: bcrypt.hashSync(password, 8),
+      email,
+      password: await hashPassword(password),
       role: role || 'user',
     })
-
-    const accessToken = jwt.sign({ userId: newUser._id }, config.secret, {
-      expiresIn: '1d',
-    })
+    const accessToken = createAccessToken(newUser._id)
     newUser.accessToken = accessToken
     await newUser.save()
 
@@ -37,9 +34,22 @@ export const signUp = async (req, res, next) => {
       accessToken,
     })
   } catch (err) {
+    debugger
     console.log('err', err)
     next(err)
   }
 }
 
-export const signIn = (req, res) => {}
+export async function validatePassword(plainPassword, hashedPassword) {
+  return bcrypt.compare(plainPassword, hashedPassword)
+}
+
+export async function hashPassword(password) {
+  return bcrypt.hash(password, 10)
+}
+
+export function createAccessToken(userId) {
+  return jwt.sign({ userId }, config.secret, {
+    expiresIn: '1d',
+  })
+}
