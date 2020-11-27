@@ -26,7 +26,7 @@ describe('signUp()', () => {
     })
   })
 
-  test('happy path - res.json() return data', async () => {
+  test('happy path - [SignUp] successfully', async () => {
     const email = 'roger@gmail.com'
     const req = buildReq({
       body: {

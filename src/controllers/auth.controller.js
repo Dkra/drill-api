@@ -1,23 +1,11 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { BadRequest } from '../utils/errors'
-import { checkDuplicateEmail } from '../middleware/verifySignUp'
 import UserModel from '../models/user.model'
 import config from '../config/auth.config'
 
 export const signUp = async (req, res, next) => {
   try {
     const { email, password, role } = req.body
-
-    // field is required
-    if (!email || !password) {
-      const field = []
-      if (!email) field.push('email')
-      if (!password) field.push('password')
-      throw new BadRequest(`${field.join(' ,')} is required!`)
-    }
-    // check if email exist
-    await checkDuplicateEmail(req, res, next)
 
     // if not, save user to db
     const newUser = new UserModel({
@@ -27,6 +15,7 @@ export const signUp = async (req, res, next) => {
     })
     const accessToken = createAccessToken(newUser._id)
     newUser.accessToken = accessToken
+
     await newUser.save()
 
     res.json({
@@ -34,7 +23,6 @@ export const signUp = async (req, res, next) => {
       accessToken,
     })
   } catch (err) {
-    debugger
     console.log('err', err)
     next(err)
   }

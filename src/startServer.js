@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime'
 import express from 'express'
 import morgan from 'morgan'
 import winston from 'winston'
+import router from './routes'
 import handleErrors from './middleware/handleErrors'
 import createLogger from './utils/logger'
 import bodyParser from 'body-parser'
@@ -29,6 +30,7 @@ function startServer({ port = PORT } = {}) {
     res.send('Welcome to Drill API')
   })
   app.use('/articles', article)
+  app.use('/', router)
 
   app.get('/not-found', (req, res) => {
     if (req.accepts('json')) {
