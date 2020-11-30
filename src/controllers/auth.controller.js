@@ -2,10 +2,13 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import UserModel from '../models/user.model'
 import config from '../config/auth.config'
+import { checkDuplicateEmail } from '../utils/verifySignUp'
 
 export const signUp = async (req, res, next) => {
   try {
     const { email, password, role } = req.body
+
+    await checkDuplicateEmail(req, res, next)
 
     // if not, save user to db
     const newUser = new UserModel({

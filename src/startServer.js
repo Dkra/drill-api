@@ -26,11 +26,11 @@ function startServer({ port = PORT } = {}) {
   app.use(morgan('combined', { stream: logger.stream.write })) // Morgon - HTTP request logger middleware
 
   // Routing
-  app.get('/', (req, res) => {
-    res.send('Welcome to Drill API')
-  })
-  app.use('/articles', article)
   app.use('/', router)
+  // app.get('/', (req, res) => {
+  //   res.send('Welcome to Drill API')
+  // })
+  app.use('/articles', article)
 
   app.get('/not-found', (req, res) => {
     if (req.accepts('json')) {
